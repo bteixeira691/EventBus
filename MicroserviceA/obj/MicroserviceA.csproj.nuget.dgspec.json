@@ -1,0 +1,162 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\dakar\\source\\repos\\EventBus\\MicroserviceA\\MicroserviceA.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\EventBus.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\EventBus.csproj",
+        "projectName": "EventBus",
+        "projectPath": "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\EventBus.csproj",
+        "packagesPath": "C:\\Users\\dakar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\dakar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Autofac": {
+              "target": "Package",
+              "version": "[5.1.4, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "Polly": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[5.1.2, )"
+            },
+            "Seq.Extensions.Logging": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\dakar\\source\\repos\\EventBus\\MicroserviceA\\MicroserviceA.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\dakar\\source\\repos\\EventBus\\MicroserviceA\\MicroserviceA.csproj",
+        "projectName": "MicroserviceA",
+        "projectPath": "C:\\Users\\dakar\\source\\repos\\EventBus\\MicroserviceA\\MicroserviceA.csproj",
+        "packagesPath": "C:\\Users\\dakar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dakar\\source\\repos\\EventBus\\MicroserviceA\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\dakar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\EventBus.csproj": {
+                "projectPath": "C:\\Users\\dakar\\source\\repos\\EventBus\\EventBus\\EventBus.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Autofac": {
+              "target": "Package",
+              "version": "[5.1.4, )"
+            },
+            "Autofac.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[5.1.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

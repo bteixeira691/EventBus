@@ -1,0 +1,16 @@
+D:\repos\ULink\UserManagement\EventBus\bin\Debug\netstandard2.0\EventBus.deps.json
+D:\repos\ULink\UserManagement\EventBus\bin\Debug\netstandard2.0\EventBus.dll
+D:\repos\ULink\UserManagement\EventBus\bin\Debug\netstandard2.0\EventBus.pdb
+D:\repos\ULink\UserManagement\EventBus\obj\Debug\netstandard2.0\EventBus.csproj.CoreCompileInputs.cache
+D:\repos\ULink\UserManagement\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfoInputs.cache
+D:\repos\ULink\UserManagement\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfo.cs
+D:\repos\ULink\UserManagement\EventBus\obj\Debug\netstandard2.0\EventBus.dll
+D:\repos\ULink\UserManagement\EventBus\obj\Debug\netstandard2.0\EventBus.pdb
+C:\Users\dakar\source\repos\EventBus\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfoInputs.cache
+C:\Users\dakar\source\repos\EventBus\EventBus\obj\Debug\netstandard2.0\EventBus.AssemblyInfo.cs
+C:\Users\dakar\source\repos\EventBus\EventBus\obj\Debug\netstandard2.0\EventBus.dll
+C:\Users\dakar\source\repos\EventBus\EventBus\obj\Debug\netstandard2.0\EventBus.pdb
+C:\Users\dakar\source\repos\EventBus\EventBus\bin\Debug\netstandard2.0\EventBus.deps.json
+C:\Users\dakar\source\repos\EventBus\EventBus\bin\Debug\netstandard2.0\EventBus.dll
+C:\Users\dakar\source\repos\EventBus\EventBus\bin\Debug\netstandard2.0\EventBus.pdb
+C:\Users\dakar\source\repos\EventBus\EventBus\obj\Debug\netstandard2.0\EventBus.csproj.CoreCompileInputs.cache

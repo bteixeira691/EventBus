@@ -11,20 +11,18 @@ namespace EventBus.Kafka
     public class KafkaConnection 
     {
         private readonly ProducerConfig _producerConfiguration;
-        private readonly SchemaRegistryConfig _schemaRegistryConfiguration;
         private readonly ConsumerConfig _consumerConfiguration;
         private readonly AvroSerializerConfig _avroSerializerConfiguration;
         private object _producerBuilder;
 
         public KafkaConnection(ProducerConfig producerConfig, ConsumerConfig consumerConfig,
-            SchemaRegistryConfig schemaRegistryConfig, AvroSerializerConfig avroSerializerConfig)
+              AvroSerializerConfig avroSerializerConfig)
         {
 
 
             this._producerConfiguration = producerConfig ?? throw new ArgumentNullException(nameof(producerConfig));
             this._consumerConfiguration = consumerConfig ?? throw new ArgumentNullException(nameof(consumerConfig));
-            this._schemaRegistryConfiguration = schemaRegistryConfig ?? throw new ArgumentNullException(nameof(schemaRegistryConfig));
-            this._avroSerializerConfiguration = avroSerializerConfig ?? throw new ArgumentNullException(nameof(avroSerializerConfig));
+                       this._avroSerializerConfiguration = avroSerializerConfig ?? throw new ArgumentNullException(nameof(avroSerializerConfig));
 
         }
 
@@ -32,10 +30,10 @@ namespace EventBus.Kafka
         {
             if (_producerBuilder == null)
             {
-                var schemaRegistry = new CachedSchemaRegistryClient(_schemaRegistryConfiguration);
+
                 _producerBuilder = new ProducerBuilder<Null, T>(_producerConfiguration)
                              //.SetKeySerializer(new AvroSerializer<string>(schemaRegistry))
-                             .SetValueSerializer(new AvroSerializer<T>(schemaRegistry))
+
                             .Build();
             }
             return (IProducer<Null, T>)_producerBuilder;
@@ -43,10 +41,10 @@ namespace EventBus.Kafka
 
         public IConsumer<Null, T> ConsumerBuilder<T>()
         {
-            var schemaRegistry = new CachedSchemaRegistryClient(_schemaRegistryConfiguration);
+
             var consumer = new ConsumerBuilder<Null, T>(_consumerConfiguration)
                 //.SetKeyDeserializer(new AvroDeserializer<string>(schemaRegistry).AsSyncOverAsync())
-                .SetValueDeserializer(new AvroDeserializer<T>(schemaRegistry).AsSyncOverAsync())
+
                 .Build();
             return consumer;
         }

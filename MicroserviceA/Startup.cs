@@ -120,7 +120,6 @@ namespace MicroserviceA
 
 
             //services.AddScoped<IEventBus, EventBusRabbitMQ>();
-            services.AddScoped<IEventBus, EventBusKafka>();
             services.AddControllers();
         }
 

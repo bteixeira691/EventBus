@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.4" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Confluent.Kafka" Version="1.8.1" />
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
   </ItemGroup>
 

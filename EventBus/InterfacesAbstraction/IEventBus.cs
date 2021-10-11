@@ -2,15 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EventBus.InterfacesAbstraction
 {
     public interface IEventBus
     {
-        void Publish(Event _event);
+        Task Publish(Event _event);
 
-        void Subscribe<T, TH>() where T : Event where TH : IEventHandler<T>;
-
-        void Unsubscribe<T, TH>() where T : Event where TH : IEventHandler<T>;
+        Task Subscribe<T, TH>() where T : Event where TH : IEventHandler<T>;
     }
 }

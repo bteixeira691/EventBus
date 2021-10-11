@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Confluent.Kafka;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
 using EventBus;
 using EventBus.InterfacesAbstraction;
+using EventBus.Kafka;
 using EventBus.RabbitMQ;
 using MicroserviceB.Event;
 using MicroserviceB.Handler;
@@ -69,6 +74,43 @@ namespace MicroserviceB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var producerConfiguration = new ProducerConfig { BootstrapServers = "localhost:9092" };
+            var schemaRegistryConfiguration = new SchemaRegistryConfig
+            {
+                Url = "localhost:8081",
+                RequestTimeoutMs = 5000,
+                MaxCachedSchemas = 10
+            };
+            var avroSerializerConfiguration = new AvroSerializerConfig
+            {
+                // optional Avro serializer properties:
+                // BufferBytes = 100,
+                AutoRegisterSchemas = true,
+            };
+
+            var consumerConfiguration = new ConsumerConfig
+            {
+                BootstrapServers = "localhost:9092",
+                GroupId = Assembly.GetExecutingAssembly().GetName().Name
+            };
+
+
+            services.AddSingleton(new KafkaConnection(
+         producerConfiguration
+         , consumerConfiguration
+         , schemaRegistryConfiguration
+         , avroSerializerConfiguration));
+
+            services.AddSingleton<IEventBus, EventBusKafka>(sp =>
+            {
+                var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
+                var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
+                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
+            });
+
+
+            services.AddScoped<IEventBus, EventBusKafka>();
             services.AddControllers();
         }
 

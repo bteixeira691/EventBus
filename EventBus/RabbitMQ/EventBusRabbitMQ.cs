@@ -63,7 +63,7 @@ namespace EventBus.RabbitMQ
             }
         }
 
-        public void Publish(Event _event)
+        public async Task Publish(Event _event)
         {
             if (!_persistentConnection.IsConnected)
             {
@@ -108,7 +108,7 @@ namespace EventBus.RabbitMQ
             }
         }
 
-        public void Subscribe<T, TH>()
+        public async Task Subscribe<T, TH>()
             where T : Event
             where TH : IEventHandler<T>
         {
@@ -140,16 +140,6 @@ namespace EventBus.RabbitMQ
             }
         }
 
-        public void Unsubscribe<T, TH>()
-            where T : Event
-            where TH : IEventHandler<T>
-        {
-            var eventName = _subsManager.GetEventKey<T>();
-
-            _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
-
-            _subsManager.RemoveSubscription<T, TH>();
-        }
 
         public void Dispose()
         {

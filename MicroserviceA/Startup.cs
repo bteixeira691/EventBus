@@ -38,19 +38,7 @@ namespace MicroserviceA
         {
 
             var producerConfiguration = new ProducerConfig { BootstrapServers = "localhost:9092" };
-            var schemaRegistryConfiguration = new SchemaRegistryConfig
-            {
-                Url = "localhost:8081",
-                RequestTimeoutMs = 5000,
-                MaxCachedSchemas = 10
-            };
-            var avroSerializerConfiguration = new AvroSerializerConfig
-            {
-                // optional Avro serializer properties:
-                // BufferBytes = 100,
-                AutoRegisterSchemas = true,
-            };
-
+           
             var consumerConfiguration = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
@@ -60,9 +48,7 @@ namespace MicroserviceA
 
             services.AddSingleton(new KafkaConnection(
          producerConfiguration
-         , consumerConfiguration
-         , avroSerializerConfiguration
-         , schemaRegistryConfiguration));
+         , consumerConfiguration));
             
             services.AddSingleton<IEventBus, EventBusKafka>(sp =>
             {

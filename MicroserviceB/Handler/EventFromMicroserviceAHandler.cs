@@ -10,7 +10,7 @@ namespace MicroserviceB.Handler
 {
     public class EventFromMicroserviceAHandler : IEventHandler<EventFromMicroserviceA>
     {
-        public async  Task Handler(EventFromMicroserviceA _event)
+        public async Task Handler(EventFromMicroserviceA _event)
         {
             string eventReceive = JsonConvert.SerializeObject(_event);
 

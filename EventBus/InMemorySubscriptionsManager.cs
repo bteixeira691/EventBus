@@ -1,5 +1,6 @@
 ﻿using EventBus.Events;
 using EventBus.InterfacesAbstraction;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,14 @@ namespace EventBus
         private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
         private readonly List<Type> _eventTypes;
         public event EventHandler<string> OnEventRemoved;
+        private readonly ILogger _logger;
 
-        public InMemorySubscriptionsManager()
+
+        public InMemorySubscriptionsManager(ILogger logger)
         {
             _handlers = new Dictionary<string, List<SubscriptionInfo>>();
             _eventTypes = new List<Type>();
+            _logger = logger;
         }
 
         public bool IsEmpty => !_handlers.Keys.Any();
@@ -26,6 +30,7 @@ namespace EventBus
             where TH : IEventHandler<T>
         {
             var eventName = GetEventKey<T>();
+            _logger.LogInformation($"Add suscription event name {eventName}");
 
             DoAddSubscription(typeof(TH), eventName, isDynamic: false);
 
@@ -83,6 +88,9 @@ namespace EventBus
         {
             var handlerToRemove = FindSubscriptionToRemove<T, TH>();
             var eventName = GetEventKey<T>();
+
+            _logger.LogInformation($"Remove subscription event name {eventName}");
+
             DoRemoveHandler(eventName, handlerToRemove);
         }
 
@@ -116,6 +124,7 @@ namespace EventBus
                     if (eventType != null)
                     {
                         _eventTypes.Remove(eventType);
+                        _logger.LogInformation($"Remove handler event type {eventType.Name}");
                     }
                     RaiseOnEventRemoved(eventName);
                 }
@@ -125,6 +134,7 @@ namespace EventBus
         private void RaiseOnEventRemoved(string eventName)
         {
             var handler = OnEventRemoved;
+            _logger.LogInformation($"Raise event to remove {eventName}");
             handler?.Invoke(this, eventName);
         }
     }

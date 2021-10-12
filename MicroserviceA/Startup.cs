@@ -33,51 +33,6 @@ namespace MicroserviceA
             Configuration = configuration;
         }
 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            var autofac = new AutofacServiceProvider(AutofacContainer);
-
-            builder.Register(c => new InMemorySubscriptionsManager())
-             .As<ISubscriptionsManager>()
-             .InstancePerLifetimeScope();
-
-            //var rabbitMQConfigSection = Configuration.GetSection("RabbitMQ");
-
-            //var factory = new ConnectionFactory()
-            //{
-            //    HostName = rabbitMQConfigSection["Host"],
-            //    UserName = rabbitMQConfigSection["UserName"],
-            //    Password = rabbitMQConfigSection["Password"],
-            //    DispatchConsumersAsync = true
-            //};
-
-            //int retryCountOut = 5;
-            //Int32.TryParse(rabbitMQConfigSection["EventBusRetryCount"], out retryCountOut);
-
-
-            //builder.Register(c => new RabbitMQConnection(factory, c.ResolveOptional<ILogger<EventBusRabbitMQ>>(), retryCountOut))
-            //  .As<IRabbitMQConnection>()
-            //  .InstancePerLifetimeScope();
-
-            //builder.Register(c => new EventBusRabbitMQ(c.ResolveOptional<IRabbitMQConnection>(),
-            //    c.ResolveOptional<ILifetimeScope>(), c.ResolveOptional<ISubscriptionsManager>(),
-            //    c.ResolveOptional<ILogger<EventBusRabbitMQ>>(), retryCountOut, "eventBus"))
-            //  .As<IEventBus>()
-            //  .InstancePerLifetimeScope();
-
-           
-
-
-
-            //builder.Register(c => new EventBusRabbitMQ(c.ResolveOptional<IRabbitMQConnection>(),
-            //   c.ResolveOptional<ILifetimeScope>(), c.ResolveOptional<ISubscriptionsManager>(),
-            //   c.ResolveOptional<ILogger<EventBusRabbitMQ>>(), retryCountOut, "eventBus"))
-            // .As<IEventBus>()
-            // .InstancePerLifetimeScope();
-
-
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -106,8 +61,8 @@ namespace MicroserviceA
             services.AddSingleton(new KafkaConnection(
          producerConfiguration
          , consumerConfiguration
-         , schemaRegistryConfiguration
-         , avroSerializerConfiguration));
+         , avroSerializerConfiguration
+         , schemaRegistryConfiguration));
             
             services.AddSingleton<IEventBus, EventBusKafka>(sp =>
             {
@@ -117,7 +72,8 @@ namespace MicroserviceA
                 return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
             });
 
-
+            //services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
+            services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
 
             //services.AddScoped<IEventBus, EventBusRabbitMQ>();
             services.AddControllers();
@@ -142,8 +98,7 @@ namespace MicroserviceA
                 endpoints.MapControllers();
             });
 
-            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-            var eventBus = AutofacContainer.Resolve<IEventBus>();
+           
         }
     }
 }

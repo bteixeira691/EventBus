@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace EventBus.Kafka
 {
@@ -27,11 +28,11 @@ namespace EventBus.Kafka
             KafkaConnection kafkaConnection, IServiceProvider serviceProvider)
         {
 
-            this._subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this._kafkaConnection = kafkaConnection ?? throw new ArgumentNullException(nameof(kafkaConnection));
-            _serviceScopeFactory = serviceProvider?.GetRequiredService<IServiceScopeFactory>()
-                ?? throw new ArgumentException($"Cannot resolve IServiceScopeFactory from {nameof(serviceProvider)}");
+            _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _kafkaConnection = kafkaConnection ?? throw new ArgumentNullException(nameof(kafkaConnection));
+            _serviceScopeFactory = serviceProvider?.GetRequiredService<IServiceScopeFactory>() 
+                                ?? throw new ArgumentException($"Cannot resolve IServiceScopeFactory from {nameof(serviceProvider)}");
         }
 
 
@@ -40,7 +41,7 @@ namespace EventBus.Kafka
         {
             if (_event == null)
             {
-                _logger.LogWarning("_event is null");
+                _logger.LogWarning("Event is null");
                 return;
             }
 
@@ -49,14 +50,15 @@ namespace EventBus.Kafka
             try
             {
                 var producer = _kafkaConnection.ProducerBuilder<Event>();
-                // _logger.LogInformation($"Publishing the event {eventType} to Kafka topic {eventType}");
+
+                _logger.LogInformation($"Publishing the event {_event} to Kafka topic {eventName}");
                 var producerResult = await producer.ProduceAsync(eventName, new Message<Null, Event>() { Value = _event });
-                // producer.Flush();
+
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 _logger.LogError($"Error occured during publishing the event to topic {_event}");
-                _logger.LogError(ex.Message + "\n" + ex.StackTrace);
+                _logger.LogError($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
             }
         }
 
@@ -81,50 +83,64 @@ namespace EventBus.Kafka
                     {
                         try
                         {
-                            //_logger.LogInformation($"Consuming from topic {eventName}");
+                            _logger.LogInformation($"Consuming from topic {eventName}");
+
                             var consumerResult = consumer.Consume();
                             await ProcessEvent(consumerResult.Message.Value);
                         }
                         catch (ConsumeException e)
                         {
                             _logger.LogError($"Error `{e.Error.Reason}` occured during consuming the event from topic {eventName}");
-                            _logger.LogError(e.Message + "\n" + e.StackTrace);
+                            _logger.LogError($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
+
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError($"Error `{e.Message}` occured during consuming the event from topic {eventName}");
                         }
                     }
-                }).ConfigureAwait(false);
-
+                });
             }
         }
 
-        private async Task<bool> ProcessEvent<T>(T value) where T : Event
+        private async Task ProcessEvent<T>(T message) where T : Event
         {
-            var processed = false;
-            var eventName = value.GetType().ToString();
 
-            if (_subscriptionManager.HasSubscriptionsForEvent(eventName))
+
+            var eventName = message.GetType().Name;
+
+            _logger.LogInformation($"Process Event {eventName}");
+            try
             {
-                using (var scope = _serviceScopeFactory.CreateScope())
+                if (_subscriptionManager.HasSubscriptionsForEvent(eventName))
                 {
-                    var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
-
-                    foreach (var subscription in subscriptions)
+                    using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        var handler = scope.ServiceProvider.GetRequiredService(subscription.HandlerType);
-                        if (handler == null) continue;
-                        var eventType = _subscriptionManager.GetEventTypeByName(eventName);
-                       
-                        var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                        var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
+
+                        _logger.LogInformation($"Subscriptions number {subscriptions.Count()}");
+
+                        foreach (var subscription in subscriptions)
+                        {
+                            var handler = scope.ServiceProvider.GetRequiredService(subscription.HandlerType);
+
+                            if (handler == null)
+                                continue;
+
+                            var eventType = _subscriptionManager.GetEventTypeByName(eventName);
+                            var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
 
 
-                        await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { value });
+                            await Task.Yield();
+                            await (Task)concreteType.GetMethod("Handler").Invoke(handler, new object[] { message });
+                        }
                     }
-
-
-
                 }
-                processed = true;
+            }catch(Exception e)
+            {
+
+                _logger.LogError($"Process Event has an error {e.Message}, StackTrace {e.StackTrace}");
             }
-            return processed;
         }
 
 

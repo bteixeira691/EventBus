@@ -8,44 +8,37 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EventBus.Kafka
 {
-    public class KafkaConnection 
+    public class KafkaConnection
     {
         private readonly ProducerConfig _producerConfiguration;
         private readonly ConsumerConfig _consumerConfiguration;
-        private readonly AvroSerializerConfig _avroSerializerConfiguration;
-        private object _producerBuilder;
 
-        public KafkaConnection(ProducerConfig producerConfig, ConsumerConfig consumerConfig,
-              AvroSerializerConfig avroSerializerConfig)
+
+        public KafkaConnection(ProducerConfig producerConfig, ConsumerConfig consumerConfig)
         {
 
 
-            this._producerConfiguration = producerConfig ?? throw new ArgumentNullException(nameof(producerConfig));
-            this._consumerConfiguration = consumerConfig ?? throw new ArgumentNullException(nameof(consumerConfig));
-                       this._avroSerializerConfiguration = avroSerializerConfig ?? throw new ArgumentNullException(nameof(avroSerializerConfig));
+            _producerConfiguration = producerConfig ?? throw new ArgumentNullException(nameof(producerConfig));
+            _consumerConfiguration = consumerConfig ?? throw new ArgumentNullException(nameof(consumerConfig));
+
 
         }
 
         public IProducer<Null, T> ProducerBuilder<T>()
         {
-            if (_producerBuilder == null)
-            {
+            var _producerBuilder = new ProducerBuilder<Null, T>(_producerConfiguration)
+                          .SetValueSerializer(new Serializer<T>())
+                         .Build();
 
-                _producerBuilder = new ProducerBuilder<Null, T>(_producerConfiguration)
-                             //.SetKeySerializer(new AvroSerializer<string>(schemaRegistry))
-
-                            .Build();
-            }
-            return (IProducer<Null, T>)_producerBuilder;
+            return _producerBuilder;
         }
 
         public IConsumer<Null, T> ConsumerBuilder<T>()
         {
-
             var consumer = new ConsumerBuilder<Null, T>(_consumerConfiguration)
-                //.SetKeyDeserializer(new AvroDeserializer<string>(schemaRegistry).AsSyncOverAsync())
-
+                .SetValueDeserializer(new Deserializer<T>())
                 .Build();
+
             return consumer;
         }
 

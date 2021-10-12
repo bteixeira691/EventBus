@@ -35,7 +35,7 @@ namespace MicroserviceA.Controllers
             var rng = new Random();
             var eventq = new EventFromMicroserviceA();
 
-            eventq.Name = "teste01";
+            eventq.Name = "teste02";
             _eventBus.Publish(eventq);
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

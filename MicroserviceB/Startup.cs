@@ -1,17 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Confluent.Kafka;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
 using EventBus;
 using EventBus.InterfacesAbstraction;
 using EventBus.Kafka;
-using EventBus.RabbitMQ;
 using MicroserviceB.Event;
 using MicroserviceB.Handler;
 using Microsoft.AspNetCore.Builder;
@@ -21,8 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
+using Serilog;
 
 namespace MicroserviceB
 {
@@ -49,23 +39,24 @@ namespace MicroserviceB
             };
 
 
-            services.AddSingleton(new KafkaConnection(
-         producerConfiguration
-         , consumerConfiguration));
+         //   services.AddSingleton(new KafkaConnection(
+         //producerConfiguration
+         //, consumerConfiguration));
 
-            services.AddSingleton<IEventBus, EventBusKafka>(sp =>
-            {
-                var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
-                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
-            });
+         //   services.AddSingleton<IEventBus, EventBusKafka>(sp =>
+         //   {
+         //       var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
+         //       var logger = sp.GetRequiredService<ILogger>();
+         //       var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
+         //       return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
+         //   });
 
 
+
+       
+         //   services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
 
             services.AddTransient<EventFromMicroserviceAHandler>();
-            services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
-
 
             services.AddControllers();
         }

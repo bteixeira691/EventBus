@@ -1,10 +1,9 @@
 ﻿using EventBus.Events;
 using EventBus.InterfacesAbstraction;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static EventBus.InMemorySubscriptionsManager;
 
 namespace EventBus
 {
@@ -30,7 +29,7 @@ namespace EventBus
             where TH : IEventHandler<T>
         {
             var eventName = GetEventKey<T>();
-            _logger.LogInformation($"Add suscription event name {eventName}");
+            _logger.Information($"Add suscription event name {eventName}");
 
             DoAddSubscription(typeof(TH), eventName, isDynamic: false);
 
@@ -89,7 +88,7 @@ namespace EventBus
             var handlerToRemove = FindSubscriptionToRemove<T, TH>();
             var eventName = GetEventKey<T>();
 
-            _logger.LogInformation($"Remove subscription event name {eventName}");
+            _logger.Information($"Remove subscription event name {eventName}");
 
             DoRemoveHandler(eventName, handlerToRemove);
         }
@@ -124,7 +123,7 @@ namespace EventBus
                     if (eventType != null)
                     {
                         _eventTypes.Remove(eventType);
-                        _logger.LogInformation($"Remove handler event type {eventType.Name}");
+                        _logger.Information($"Remove handler event type {eventType.Name}");
                     }
                     RaiseOnEventRemoved(eventName);
                 }
@@ -134,7 +133,7 @@ namespace EventBus
         private void RaiseOnEventRemoved(string eventName)
         {
             var handler = OnEventRemoved;
-            _logger.LogInformation($"Raise event to remove {eventName}");
+            _logger.Information($"Raise event to remove {eventName}");
             handler?.Invoke(this, eventName);
         }
     }

@@ -1,10 +1,5 @@
 ﻿using Confluent.Kafka;
 using System;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
-using Confluent.Kafka.SyncOverAsync;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace EventBus.Kafka
 {

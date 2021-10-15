@@ -1,16 +1,11 @@
-﻿using Autofac;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using EventBus.Events;
 using EventBus.InterfacesAbstraction;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Serilog;
 
 namespace EventBus.Kafka
 {
@@ -18,13 +13,13 @@ namespace EventBus.Kafka
     {
 
         private readonly ISubscriptionsManager _subscriptionManager;
-        private readonly ILogger<EventBusKafka> _logger;
+        private readonly ILogger _logger;
         private readonly KafkaConnection _kafkaConnection;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
 
 
-        public EventBusKafka(ISubscriptionsManager subscriptionManager, ILogger<EventBusKafka> logger,
+        public EventBusKafka(ISubscriptionsManager subscriptionManager, ILogger logger,
             KafkaConnection kafkaConnection, IServiceProvider serviceProvider)
         {
 
@@ -41,7 +36,7 @@ namespace EventBus.Kafka
         {
             if (_event == null)
             {
-                _logger.LogWarning("Event is null");
+                _logger.Warning("Event is null");
                 return;
             }
 
@@ -51,14 +46,14 @@ namespace EventBus.Kafka
             {
                 var producer = _kafkaConnection.ProducerBuilder<Event>();
 
-                _logger.LogInformation($"Publishing the event {_event} to Kafka topic {eventName}");
+                _logger.Information($"Publishing the event {_event} to Kafka topic {eventName}");
                 var producerResult = await producer.ProduceAsync(eventName, new Message<Null, Event>() { Value = _event });
 
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error occured during publishing the event to topic {_event}");
-                _logger.LogError($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
+                _logger.Error($"Error occured during publishing the event to topic {_event}");
+                _logger.Error($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
             }
         }
 
@@ -83,20 +78,20 @@ namespace EventBus.Kafka
                     {
                         try
                         {
-                            _logger.LogInformation($"Consuming from topic {eventName}");
+                            _logger.Information($"Consuming from topic {eventName}");
 
                             var consumerResult = consumer.Consume();
                             await ProcessEvent(consumerResult.Message.Value);
                         }
                         catch (ConsumeException e)
                         {
-                            _logger.LogError($"Error `{e.Error.Reason}` occured during consuming the event from topic {eventName}");
-                            _logger.LogError($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
+                            _logger.Error($"Error `{e.Error.Reason}` occured during consuming the event from topic {eventName}");
+                            _logger.Error($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
 
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError($"Error `{e.Message}` occured during consuming the event from topic {eventName}");
+                            _logger.Error($"Error `{e.Message}` occured during consuming the event from topic {eventName}");
                         }
                     }
                 });
@@ -109,7 +104,7 @@ namespace EventBus.Kafka
 
             var eventName = message.GetType().Name;
 
-            _logger.LogInformation($"Process Event {eventName}");
+            _logger.Information($"Process Event {eventName}");
             try
             {
                 if (_subscriptionManager.HasSubscriptionsForEvent(eventName))
@@ -118,7 +113,7 @@ namespace EventBus.Kafka
                     {
                         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
 
-                        _logger.LogInformation($"Subscriptions number {subscriptions.Count()}");
+                        _logger.Information($"Subscriptions number {subscriptions.Count()}");
 
                         foreach (var subscription in subscriptions)
                         {
@@ -139,7 +134,7 @@ namespace EventBus.Kafka
             }catch(Exception e)
             {
 
-                _logger.LogError($"Process Event has an error {e.Message}, StackTrace {e.StackTrace}");
+                _logger.Error($"Process Event has an error {e.Message}, StackTrace {e.StackTrace}");
             }
         }
 

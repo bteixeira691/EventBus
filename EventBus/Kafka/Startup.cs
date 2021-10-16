@@ -19,6 +19,9 @@ namespace EventBus.Kafka
             var keyValuePairProducer = configuration.GetSection("Kafka:ProducerConfig").GetChildren();
             var keyValuePairConsumer = configuration.GetSection("Kafka:ConsumerConfig").GetChildren();
 
+            services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
+
+            services.AddSingleton(Log.Logger);
 
             services.AddSingleton(new KafkaConnection(GetProducerValues(keyValuePairProducer), GetComsumerValues(keyValuePairConsumer)));
 
@@ -29,7 +32,7 @@ namespace EventBus.Kafka
                 var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
                 return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
             });
-            services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
+
 
         }
 

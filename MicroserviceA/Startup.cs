@@ -1,19 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Confluent.Kafka;
-using EventBus;
-using EventBus.InterfacesAbstraction;
 using EventBus.Kafka;
-using EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +11,6 @@ namespace MicroserviceA
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public ILifetimeScope AutofacContainer { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

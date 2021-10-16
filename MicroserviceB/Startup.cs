@@ -1,4 +1,4 @@
-using Autofac;
+
 using Confluent.Kafka;
 using EventBus;
 using EventBus.InterfacesAbstraction;
@@ -19,7 +19,6 @@ namespace MicroserviceB
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public ILifetimeScope AutofacContainer { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,23 +38,25 @@ namespace MicroserviceB
             };
 
 
-         //   services.AddSingleton(new KafkaConnection(
-         //producerConfiguration
-         //, consumerConfiguration));
+            //   services.AddSingleton(new KafkaConnection(
+            //producerConfiguration
+            //, consumerConfiguration));
 
-         //   services.AddSingleton<IEventBus, EventBusKafka>(sp =>
-         //   {
-         //       var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
-         //       var logger = sp.GetRequiredService<ILogger>();
-         //       var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
-         //       return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
-         //   });
+            //   services.AddSingleton<IEventBus, EventBusKafka>(sp =>
+            //   {
+            //       var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
+            //       var logger = sp.GetRequiredService<ILogger>();
+            //       var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
+            //       return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
+            //   });
 
 
 
-       
-         //   services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
 
+            //   services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
+
+
+            services.AddKafka(Configuration);
             services.AddTransient<EventFromMicroserviceAHandler>();
 
             services.AddControllers();

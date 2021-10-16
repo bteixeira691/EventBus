@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus", "EventBus\EventB
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D0835C18-B495-4A34-BE03-509A658A91DC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{12979B4B-E9EA-4715-BDD2-E25874E52BE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka", "Kafka", "{C0958086-05D5-435F-A74E-0C4B2F47D059}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C77E757D-F893-406B-934A-0BD76006D5B3} = {C0958086-05D5-435F-A74E-0C4B2F47D059}
+		{74546156-7F76-402B-9A4A-1451266B366D} = {C0958086-05D5-435F-A74E-0C4B2F47D059}
+		{C0958086-05D5-435F-A74E-0C4B2F47D059} = {12979B4B-E9EA-4715-BDD2-E25874E52BE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FFC8CB3-5346-47D6-A14E-B346265D9675}

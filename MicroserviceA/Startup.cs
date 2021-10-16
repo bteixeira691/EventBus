@@ -1,33 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Confluent.Kafka;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
-using EventBus;
-using EventBus.InterfacesAbstraction;
 using EventBus.Kafka;
-using EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
+using Serilog;
 
 namespace MicroserviceA
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public ILifetimeScope AutofacContainer { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,31 +20,36 @@ namespace MicroserviceA
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var producerConfiguration = new ProducerConfig { BootstrapServers = "localhost:9092" };
-           
-            var consumerConfiguration = new ConsumerConfig
-            {
-                BootstrapServers = "localhost:9092",
-                GroupId = Assembly.GetExecutingAssembly().GetName().Name
-            };
+            //var producerConfiguration = new ProducerConfig 
+            //{ 
+            //    BootstrapServers = "localhost:9092" 
+            //};
+
+            //var consumerConfiguration = new ConsumerConfig
+            //{
+            //    BootstrapServers = "localhost:9092",
+            //    GroupId = Assembly.GetExecutingAssembly().GetName().Name
+            //};
 
 
-            services.AddSingleton(new KafkaConnection(
-         producerConfiguration
-         , consumerConfiguration));
-            
-            services.AddSingleton<IEventBus, EventBusKafka>(sp =>
-            {
-                var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
-                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
-            });
+            //services.AddSingleton(new KafkaConnection(
+            //producerConfiguration
+            //,consumerConfiguration));
 
-            //services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
-            services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
+            //services.AddSingleton<IEventBus, EventBusKafka>(sp =>
+            //{
+            //    var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
+            //    var logger = sp.GetRequiredService<ILogger>();
+            //    var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
+            //    return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
+            //});
+
+            ////services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
+            //services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
 
             //services.AddScoped<IEventBus, EventBusRabbitMQ>();
+
+            services.AddKafka(Configuration);
             services.AddControllers();
         }
 

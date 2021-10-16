@@ -1,14 +1,13 @@
-﻿using Autofac;
-using EventBus.Events;
+﻿using EventBus.Events;
 using EventBus.InterfacesAbstraction;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using Serilog;
 using System;
 using System.Net.Sockets;
 using System.Text;
@@ -75,7 +74,7 @@ namespace EventBus.RabbitMQ
                 .Or<SocketException>()
                 .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                 {
-                    _logger.LogWarning(ex, "Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", _event.Id, $"{time.TotalSeconds:n1}", ex.Message);
+                    _logger.Warning(ex, "Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})", _event.Id, $"{time.TotalSeconds:n1}", ex.Message);
                 });
 
             var eventName = _event.GetType().Name;
@@ -85,7 +84,7 @@ namespace EventBus.RabbitMQ
             using (var channel = _persistentConnection.CreateModel())
             {
 
-                _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", _event.Id);
+                _logger.Information("Declaring RabbitMQ exchange to publish event: {EventId}", _event.Id);
 
                 channel.ExchangeDeclare(exchange: _brokenName, type: "direct");
 
@@ -97,7 +96,7 @@ namespace EventBus.RabbitMQ
                     var properties = channel.CreateBasicProperties();
                     properties.DeliveryMode = 2; 
 
-                    _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", _event.Id);
+                    _logger.Information("Publishing event to RabbitMQ: {EventId}", _event.Id);
 
                     channel.BasicPublish(
                         exchange: _brokenName,
@@ -116,7 +115,7 @@ namespace EventBus.RabbitMQ
             var eventName = _subsManager.GetEventKey<T>();
             DoInternalSubscription(eventName);
 
-            _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+            _logger.Information("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
 
             _subsManager.AddSubscription<T, TH>();
             StartBasicConsume();
@@ -154,7 +153,7 @@ namespace EventBus.RabbitMQ
 
         private void StartBasicConsume()
         {
-             _logger.LogTrace("Starting RabbitMQ basic consume");
+             _logger.Information("Starting RabbitMQ basic consume");
 
             if (_consumerChannel != null)
             {
@@ -169,7 +168,7 @@ namespace EventBus.RabbitMQ
             }
             else
             {
-                _logger.LogError("StartBasicConsume can't call on _consumerChannel == null");
+                _logger.Error("StartBasicConsume can't call on _consumerChannel == null");
             }
         }
 
@@ -189,7 +188,7 @@ namespace EventBus.RabbitMQ
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "----- ERROR Processing message \"{Message}\"", message);
+                _logger.Warning(ex, "----- ERROR Processing message \"{Message}\"", message);
             }
 
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, multiple: false);
@@ -202,7 +201,7 @@ namespace EventBus.RabbitMQ
                 _persistentConnection.TryConnect();
             }
 
-            _logger.LogTrace("Creating RabbitMQ consumer channel");
+            _logger.Information("Creating RabbitMQ consumer channel");
 
             var channel = _persistentConnection.CreateModel();
 
@@ -217,7 +216,7 @@ namespace EventBus.RabbitMQ
 
             channel.CallbackException += (sender, ea) =>
             {
-                _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel");
+                _logger.Warning(ea.Exception, "Recreating RabbitMQ consumer channel");
 
                 _consumerChannel.Dispose();
                 _consumerChannel = CreateConsumerChannel();
@@ -229,7 +228,7 @@ namespace EventBus.RabbitMQ
 
         private async Task ProcessEvent(string eventName, string message)
         {
-            _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);
+            _logger.Information("Processing RabbitMQ event: {EventName}", eventName);
 
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {
@@ -256,7 +255,7 @@ namespace EventBus.RabbitMQ
             }
             else
             {
-                _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
+                _logger.Warning("No subscription for RabbitMQ event: {EventName}", eventName);
             }
         }
     }

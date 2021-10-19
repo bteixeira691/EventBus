@@ -22,12 +22,11 @@ namespace EventBus.RabbitMQ
 
         object sync_root = new object();
 
-        public RabbitMQConnection(IConnectionFactory connectionFactory, ILogger logger, int retryCount = 5)
+        public RabbitMQConnection(IConnectionFactory connectionFactory, ILogger logger, ComplementaryConfig complementaryConfig )
         {
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 
-            _retryCount = retryCount;
-
+            _retryCount = complementaryConfig.Retry;
             _logger = logger;
         }
 
@@ -75,7 +74,7 @@ namespace EventBus.RabbitMQ
                     .Or<BrokerUnreachableException>()
                     .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                     {
-                        //_logger.Warning(ex, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
+                        _logger.Warning(ex, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                     }
                 );
 

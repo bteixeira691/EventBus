@@ -1,7 +1,7 @@
-﻿using Confluent.Kafka;
-using EventBus.InterfacesAbstraction;
+﻿using EventBus.InterfacesAbstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,38 +9,42 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-namespace EventBus.Kafka
+namespace EventBus.RabbitMQ
 {
     public static class Startup
     {
-      
+
         public static void AddKafka(this IServiceCollection services, IConfiguration configuration)
         {
-            var keyValuePairProducer = configuration.GetSection("Kafka:ProducerConfig").GetChildren();
-            var keyValuePairConsumer = configuration.GetSection("Kafka:ConsumerConfig").GetChildren();
+            var keyValuePairConfig = configuration.GetSection("Rabbit:Config").GetChildren();
+            var keyValuePairComplementaryConfig = configuration.GetSection("Rabbit:ComplementaryConfig").GetChildren();
+
+            ComplementaryConfig complementaryConfig = GetComplementaryConfigValues(keyValuePairComplementaryConfig);
 
             services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
-
             services.AddSingleton(Log.Logger);
+            services.AddSingleton(new RabbitMQConnection(GetConnectionValues(keyValuePairConfig), Log.Logger, complementaryConfig));
 
-            services.AddSingleton(new KafkaConnection(GetProducerValues(keyValuePairProducer), GetComsumerValues(keyValuePairConsumer)));
 
-            services.AddSingleton<IEventBus, EventBusKafka>(sp =>
+
+            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
             {
-                var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
+                var kafkaConnection = sp.GetRequiredService<RabbitMQConnection>();
                 var logger = sp.GetRequiredService<ILogger>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
+                var rabbitMQConnection = sp.GetRequiredService<IRabbitMQConnection>();
                 var serviceProvider = sp.GetRequiredService<IServiceScopeFactory>();
-                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, serviceProvider);
+                return new EventBusRabbitMQ(rabbitMQConnection,eventBusSubcriptionsManager, logger, serviceProvider, complementaryConfig);
             });
 
 
+
         }
 
-        private static ProducerConfig GetProducerValues(IEnumerable<IConfigurationSection> children)
+        private static ConnectionFactory GetConnectionValues(IEnumerable<IConfigurationSection> children)
         {
-            ProducerConfig producer = new ProducerConfig();
-            Type type = typeof(ProducerConfig);
+            ConnectionFactory connection = new ConnectionFactory();
+            Type type = typeof(ConnectionFactory);
 
             foreach (var child in children)
             {
@@ -53,46 +57,12 @@ namespace EventBus.Kafka
                     {
                         if (child.Value == null)
                         {
-                            propInfo.SetValue(producer, null, null);
+                            propInfo.SetValue(connection, null, null);
                             break;
                         }
                         tProp = new NullableConverter(propInfo.PropertyType).UnderlyingType;
                     }
-                    propInfo.SetValue(producer, Convert.ChangeType(child.Value, tProp), null);
-                }
-                catch(Exception e)
-                {
-                    Log.Error($"Property does not exist {child.Key}");
-                    Log.Information(e.Message);
-
-                }
-            }
-            return producer;
-        }
-
-        private static ConsumerConfig GetComsumerValues(IEnumerable<IConfigurationSection> children)
-        {
-            ConsumerConfig consumer = new ConsumerConfig();
-
-            Type type = typeof(ConsumerConfig);
-
-            foreach (var child in children)
-            {
-                try
-                {
-                    PropertyInfo propInfo = type.GetProperty(child.Key);
-                    Type tProp = propInfo.PropertyType;
-
-                    if (tProp.IsGenericType && tProp.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-                    {
-                        if (child.Value == null)
-                        {
-                            propInfo.SetValue(consumer, null, null);
-                            break;
-                        }
-                        tProp = new NullableConverter(propInfo.PropertyType).UnderlyingType;
-                    }
-                    propInfo.SetValue(consumer, Convert.ChangeType(child.Value, tProp), null);
+                    propInfo.SetValue(connection, Convert.ChangeType(child.Value, tProp), null);
                 }
                 catch (Exception e)
                 {
@@ -101,8 +71,42 @@ namespace EventBus.Kafka
 
                 }
             }
-            return consumer;
-
+            return connection;
         }
+
+        private static ComplementaryConfig GetComplementaryConfigValues(IEnumerable<IConfigurationSection> children)
+        {
+            ComplementaryConfig complementaryConfig = new ComplementaryConfig();
+            Type type = typeof(ComplementaryConfig);
+
+            foreach (var child in children)
+            {
+                try
+                {
+                    PropertyInfo propInfo = type.GetProperty(child.Key);
+                    Type tProp = propInfo.PropertyType;
+
+                    if (tProp.IsGenericType && tProp.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                    {
+                        if (child.Value == null)
+                        {
+                            propInfo.SetValue(complementaryConfig, null, null);
+                            break;
+                        }
+                        tProp = new NullableConverter(propInfo.PropertyType).UnderlyingType;
+                    }
+                    propInfo.SetValue(complementaryConfig, Convert.ChangeType(child.Value, tProp), null);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Property does not exist {child.Key}");
+                    Log.Information(e.Message);
+
+                }
+            }
+            return complementaryConfig;
+        }
+
+
     }
 }

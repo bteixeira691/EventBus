@@ -17,7 +17,7 @@ namespace EventBus.RabbitMQ
 {
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
-        private string _brokenName;
+
 
         private readonly IRabbitMQConnection _persistentConnection;
         private readonly ILogger _logger;
@@ -27,17 +27,20 @@ namespace EventBus.RabbitMQ
 
         private IModel _consumerChannel;
         private string _queueName;
+        private string _brokenName;
 
         public EventBusRabbitMQ(IRabbitMQConnection persistentConnection,ISubscriptionsManager subsManager, 
-            ILogger logger, int retryCount, IServiceScopeFactory serviceScopeFactory, string queueName = "QueueRabbitMq", string bokerName="BrokenNameRabbitMq")
+            ILogger logger, IServiceScopeFactory serviceScopeFactory, ComplementaryConfig complementaryConfig)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
-            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
+            _serviceScopeFactory = serviceScopeFactory?? throw new ArgumentNullException(nameof(serviceScopeFactory));
             _subsManager = subsManager ?? throw new ArgumentNullException(nameof(subsManager));
-            _queueName = queueName;
+
+            _queueName = complementaryConfig.QueueName;
+            _brokenName = complementaryConfig.BrokenName;
             _consumerChannel = CreateConsumerChannel();
 
-            _retryCount = retryCount;
+            _retryCount = complementaryConfig.Retry;
             _logger = logger;
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
         }
@@ -78,8 +81,6 @@ namespace EventBus.RabbitMQ
                 });
 
             var eventName = _event.GetType().Name;
-
-            //_logger.LogTrace("Creating RabbitMQ channel to publish event: {EventId} ({EventName})", @event.Id, eventName);
 
             using (var channel = _persistentConnection.CreateModel())
             {
@@ -175,7 +176,7 @@ namespace EventBus.RabbitMQ
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs eventArgs)
         {
             var eventName = eventArgs.RoutingKey;
-            var message = Encoding.UTF8.GetString(eventArgs.Body);
+            var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
             try
             {

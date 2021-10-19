@@ -20,6 +20,17 @@ namespace MicroserviceA
         public void ConfigureServices(IServiceCollection services)
         {
 
+
+
+            builder.Register(c => new EventBusRabbitMQ(c.ResolveOptional<IRabbitMQConnection>(),
+                c.ResolveOptional<ILifetimeScope>(), c.ResolveOptional<ISubscriptionsManager>(),
+                c.ResolveOptional<ILogger<EventBusRabbitMQ>>(), retryCountOut, "eventBus"))
+              .As<IEventBus>()
+              .InstancePerLifetimeScope();
+
+
+            services.AddScoped<IEventBus, EventBusRabbitMQ>();
+
             //var producerConfiguration = new ProducerConfig 
             //{ 
             //    BootstrapServers = "localhost:9092" 

@@ -30,7 +30,8 @@ namespace EventBus.Kafka
                 var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
                 var logger = sp.GetRequiredService<ILogger>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
-                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
+                var serviceProvider = sp.GetRequiredService<IServiceScopeFactory>();
+                return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, serviceProvider);
             });
 
 

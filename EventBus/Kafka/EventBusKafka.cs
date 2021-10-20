@@ -20,14 +20,13 @@ namespace EventBus.Kafka
 
 
         public EventBusKafka(ISubscriptionsManager subscriptionManager, ILogger logger,
-            KafkaConnection kafkaConnection, IServiceProvider serviceProvider)
+            KafkaConnection kafkaConnection, IServiceScopeFactory serviceProvider)
         {
 
             _subscriptionManager = subscriptionManager ?? throw new ArgumentNullException(nameof(subscriptionManager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _kafkaConnection = kafkaConnection ?? throw new ArgumentNullException(nameof(kafkaConnection));
-            _serviceScopeFactory = serviceProvider?.GetRequiredService<IServiceScopeFactory>() 
-                                ?? throw new ArgumentException($"Cannot resolve IServiceScopeFactory from {nameof(serviceProvider)}");
+            _serviceScopeFactory = serviceProvider ?? throw new ArgumentException($"Cannot resolve IServiceScopeFactory from {nameof(serviceProvider)}");
         }
 
 
@@ -53,7 +52,7 @@ namespace EventBus.Kafka
             catch (Exception e)
             {
                 _logger.Error($"Error occured during publishing the event to topic {_event}");
-                _logger.Error($"Consume exception {e.Message}, StackTrace {e.StackTrace}");
+                _logger.Error($"Producer exception {e.Message}, StackTrace {e.StackTrace}");
             }
         }
 

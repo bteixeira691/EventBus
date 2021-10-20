@@ -202,7 +202,7 @@ namespace EventBus.RabbitMQ
                 _persistentConnection.TryConnect();
             }
 
-            _logger.Information("Creating RabbitMQ consumer channel");
+            //_logger.Information("Creating RabbitMQ consumer channel");
 
             var channel = _persistentConnection.CreateModel();
 

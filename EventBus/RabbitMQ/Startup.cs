@@ -14,22 +14,24 @@ namespace EventBus.RabbitMQ
     public static class Startup
     {
 
-        public static void AddKafka(this IServiceCollection services, IConfiguration configuration)
+        public static void AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
         {
-            var keyValuePairConfig = configuration.GetSection("Rabbit:Config").GetChildren();
-            var keyValuePairComplementaryConfig = configuration.GetSection("Rabbit:ComplementaryConfig").GetChildren();
+            var keyValuePairConfig = configuration.GetSection("RabbitMQ:Config").GetChildren();
+            var keyValuePairComplementaryConfig = configuration.GetSection("RabbitMQ:ComplementaryConfig").GetChildren();
 
             ComplementaryConfig complementaryConfig = GetComplementaryConfigValues(keyValuePairComplementaryConfig);
 
             services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
             services.AddSingleton(Log.Logger);
-            services.AddSingleton(new RabbitMQConnection(GetConnectionValues(keyValuePairConfig), Log.Logger, complementaryConfig));
-
+            services.AddSingleton<IRabbitMQConnection, RabbitMQConnection>(sp => 
+            {
+                return new RabbitMQConnection(GetConnectionValues(keyValuePairConfig),Log.Logger, complementaryConfig);
+            });
+           
 
 
             services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
             {
-                var kafkaConnection = sp.GetRequiredService<RabbitMQConnection>();
                 var logger = sp.GetRequiredService<ILogger>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
                 var rabbitMQConnection = sp.GetRequiredService<IRabbitMQConnection>();

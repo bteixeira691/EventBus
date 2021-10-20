@@ -20,46 +20,6 @@ namespace MicroserviceA
         public void ConfigureServices(IServiceCollection services)
         {
 
-
-
-            builder.Register(c => new EventBusRabbitMQ(c.ResolveOptional<IRabbitMQConnection>(),
-                c.ResolveOptional<ILifetimeScope>(), c.ResolveOptional<ISubscriptionsManager>(),
-                c.ResolveOptional<ILogger<EventBusRabbitMQ>>(), retryCountOut, "eventBus"))
-              .As<IEventBus>()
-              .InstancePerLifetimeScope();
-
-
-            services.AddScoped<IEventBus, EventBusRabbitMQ>();
-
-            //var producerConfiguration = new ProducerConfig 
-            //{ 
-            //    BootstrapServers = "localhost:9092" 
-            //};
-
-            //var consumerConfiguration = new ConsumerConfig
-            //{
-            //    BootstrapServers = "localhost:9092",
-            //    GroupId = Assembly.GetExecutingAssembly().GetName().Name
-            //};
-
-
-            //services.AddSingleton(new KafkaConnection(
-            //producerConfiguration
-            //,consumerConfiguration));
-
-            //services.AddSingleton<IEventBus, EventBusKafka>(sp =>
-            //{
-            //    var kafkaConnection = sp.GetRequiredService<KafkaConnection>();
-            //    var logger = sp.GetRequiredService<ILogger>();
-            //    var eventBusSubcriptionsManager = sp.GetRequiredService<ISubscriptionsManager>();
-            //    return new EventBusKafka(eventBusSubcriptionsManager, logger, kafkaConnection, sp);
-            //});
-
-            ////services.AddTransient<OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
-            //services.AddSingleton<ISubscriptionsManager, InMemorySubscriptionsManager>();
-
-            //services.AddScoped<IEventBus, EventBusRabbitMQ>();
-
             services.AddKafka(Configuration);
             services.AddControllers();
         }

@@ -1,0 +1,82 @@
+2021-10-20 20:48:42.675 +01:00 [INF] RabbitMQ Client is trying to connect
+2021-10-20 20:48:42.806 +01:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-10-20 20:48:42.825 +01:00 [INF] Subscribing to event EventFromMicroserviceA with EventFromMicroserviceAHandler
+2021-10-20 20:48:42.825 +01:00 [INF] Add suscription event name EventFromMicroserviceA
+2021-10-20 20:48:44.468 +01:00 [INF] Starting RabbitMQ basic consume
+2021-10-20 20:48:44.576 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-10-20 20:48:44.583 +01:00 [INF] Hosting environment: Development
+2021-10-20 20:48:44.583 +01:00 [INF] Content root path: C:\Users\dakar\OneDrive\Área de Trabalho\EventBus\Samples\RabbitMQ\MicroserviceB
+2021-10-20 20:48:44.594 +01:00 [INF] Request starting HTTP/2 GET https://localhost:44395/swagger/index.html - -
+2021-10-20 20:48:44.680 +01:00 [INF] Request finished HTTP/2 GET https://localhost:44395/swagger/index.html - - - 200 - text/html;charset=utf-8 87.7191ms
+2021-10-20 20:48:44.829 +01:00 [INF] Request starting HTTP/2 GET https://localhost:44395/swagger/v1/swagger.json - -
+2021-10-20 20:48:44.875 +01:00 [INF] Request finished HTTP/2 GET https://localhost:44395/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 46.5387ms
+2021-10-20 20:49:56.301 +01:00 [INF] RabbitMQ Client is trying to connect
+2021-10-20 20:49:56.413 +01:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-10-20 20:49:56.430 +01:00 [INF] Subscribing to event EventFromMicroserviceA with EventFromMicroserviceAHandler
+2021-10-20 20:49:56.430 +01:00 [INF] Add suscription event name EventFromMicroserviceA
+2021-10-20 20:49:57.248 +01:00 [INF] Starting RabbitMQ basic consume
+2021-10-20 20:49:57.379 +01:00 [INF] Processing RabbitMQ event: EventFromMicroserviceA
+2021-10-20 20:49:57.438 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-10-20 20:49:57.448 +01:00 [INF] Hosting environment: Development
+2021-10-20 20:49:57.449 +01:00 [INF] Content root path: C:\Users\dakar\OneDrive\Área de Trabalho\EventBus\Samples\RabbitMQ\MicroserviceB
+2021-10-20 20:49:57.480 +01:00 [INF] Request starting HTTP/2 GET https://localhost:44395/swagger/index.html - -
+2021-10-20 20:49:59.808 +01:00 [INF] Request finished HTTP/2 GET https://localhost:44395/swagger/index.html - - - 200 - text/html;charset=utf-8 2329.0954ms
+2021-10-20 20:49:59.995 +01:00 [INF] Request starting HTTP/2 GET https://localhost:44395/swagger/v1/swagger.json - -
+2021-10-20 20:50:00.077 +01:00 [INF] Request finished HTTP/2 GET https://localhost:44395/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 82.0494ms
+2021-10-20 21:25:32.134 +01:00 [INF] RabbitMQ Client is trying to connect
+2021-10-20 21:25:32.249 +01:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-10-20 21:25:32.269 +01:00 [INF] Subscribing to event EventFromMicroserviceA with EventFromMicroserviceAHandler
+2021-10-20 21:25:32.269 +01:00 [INF] Add suscription event name EventFromMicroserviceA
+2021-10-20 21:32:36.989 +01:00 [INF] RabbitMQ Client is trying to connect
+2021-10-20 21:32:37.096 +01:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-10-20 21:32:37.112 +01:00 [INF] Subscribing to event EventFromMicroserviceA with EventFromMicroserviceAHandler
+2021-10-20 21:32:37.113 +01:00 [INF] Add suscription event name EventFromMicroserviceA
+2021-10-20 21:32:37.965 +01:00 [INF] Starting RabbitMQ basic consume
+2021-10-20 21:32:38.082 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-10-20 21:32:38.089 +01:00 [INF] Hosting environment: Development
+2021-10-20 21:32:38.089 +01:00 [INF] Content root path: C:\Users\dakar\OneDrive\Área de Trabalho\EventBus\Samples\RabbitMQ\MicroserviceB
+2021-10-20 21:32:38.099 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger - -
+2021-10-20 21:32:38.138 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/index.html - -
+2021-10-20 21:32:38.139 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger - - - 301 - - 42.2189ms
+2021-10-20 21:32:38.190 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/index.html - - - 200 - text/html;charset=utf-8 52.1326ms
+2021-10-20 21:32:38.223 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui-bundle.js - -
+2021-10-20 21:32:38.223 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui.css - -
+2021-10-20 21:32:38.223 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui-standalone-preset.js - -
+2021-10-20 21:32:38.270 +01:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-10-20 21:32:38.270 +01:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-10-20 21:32:38.270 +01:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-10-20 21:32:38.271 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui.css - - - 200 142933 text/css 48.7533ms
+2021-10-20 21:32:38.274 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui-standalone-preset.js - - - 200 311804 application/javascript 50.6303ms
+2021-10-20 21:32:38.282 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/swagger-ui-bundle.js - - - 200 986342 application/javascript 59.2973ms
+2021-10-20 21:32:38.407 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/v1/swagger.json - -
+2021-10-20 21:32:38.435 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63040/swagger/favicon-32x32.png - -
+2021-10-20 21:32:38.435 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-10-20 21:32:38.436 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/favicon-32x32.png - - - 200 628 image/png 1.1866ms
+2021-10-20 21:32:38.456 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63040/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 49.0293ms
+2021-10-20 21:33:21.966 +01:00 [INF] RabbitMQ Client is trying to connect
+2021-10-20 21:33:22.088 +01:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-10-20 21:33:22.107 +01:00 [INF] Subscribing to event EventFromMicroserviceA with EventFromMicroserviceAHandler
+2021-10-20 21:33:22.108 +01:00 [INF] Add suscription event name EventFromMicroserviceA
+2021-10-20 21:33:22.859 +01:00 [INF] Starting RabbitMQ basic consume
+2021-10-20 21:33:22.977 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-10-20 21:33:22.984 +01:00 [INF] Hosting environment: Development
+2021-10-20 21:33:22.984 +01:00 [INF] Content root path: C:\Users\dakar\OneDrive\Área de Trabalho\EventBus\Samples\RabbitMQ\MicroserviceB
+2021-10-20 21:33:22.993 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger - -
+2021-10-20 21:33:23.032 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/index.html - -
+2021-10-20 21:33:23.038 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger - - - 301 - - 46.3593ms
+2021-10-20 21:33:23.089 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/index.html - - - 200 - text/html;charset=utf-8 56.8550ms
+2021-10-20 21:33:23.109 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui-bundle.js - -
+2021-10-20 21:33:23.109 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui.css - -
+2021-10-20 21:33:23.109 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui-standalone-preset.js - -
+2021-10-20 21:33:23.175 +01:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-10-20 21:33:23.175 +01:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-10-20 21:33:23.175 +01:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-10-20 21:33:23.177 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui.css - - - 200 142933 text/css 68.6641ms
+2021-10-20 21:33:23.180 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui-standalone-preset.js - - - 200 311804 application/javascript 70.7003ms
+2021-10-20 21:33:23.189 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/swagger-ui-bundle.js - - - 200 986342 application/javascript 80.0585ms
+2021-10-20 21:33:23.317 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/v1/swagger.json - -
+2021-10-20 21:33:23.335 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:63041/swagger/favicon-32x32.png - -
+2021-10-20 21:33:23.335 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-10-20 21:33:23.336 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/favicon-32x32.png - - - 200 628 image/png 1.3012ms
+2021-10-20 21:33:23.361 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:63041/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 43.9186ms
+2021-10-20 21:33:33.823 +01:00 [INF] Processing RabbitMQ event: EventFromMicroserviceA

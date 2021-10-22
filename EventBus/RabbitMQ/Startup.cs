@@ -73,6 +73,11 @@ namespace EventBus.RabbitMQ
 
                 }
             }
+
+            //
+
+            connection.DispatchConsumersAsync = true;
+
             return connection;
         }
 

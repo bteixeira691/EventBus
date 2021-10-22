@@ -17,6 +17,7 @@ namespace MicroserviceB
             Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Console()
+            .WriteTo.File(@"..\MicroserviceB\Logs.txt")
             .CreateLogger();
             CreateHostBuilder(args).Build().Run();
         }

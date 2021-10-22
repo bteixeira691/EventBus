@@ -19,9 +19,9 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release  --no-restore
     - name: Publish to NuGet
-      uses: rohith/publish-nuget@v2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
-        PROJECT_FILE_PATH: EventBus\EventBus\EventBus.csproj
+        PROJECT_FILE_PATH: EventBus\EventBus.csproj
         VERSION_REGEX: '^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$'
         TAG_FORMAT: '*'
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
